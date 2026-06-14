@@ -27,21 +27,25 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-amber-50 p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">📋 Forslagstavle</h1>
-        <p className="text-gray-500 mb-8">Legg inn dine idéer og forslag</p>
+    <div style={{ background: '#F5ECD7', minHeight: '100vh', padding: '2rem' }}>
+      <div style={{ maxWidth: '900px', margin: '0 auto', background: '#F5ECD7', borderRadius: '16px', padding: '2rem', border: '6px solid #E2D4B7' }}>
+        <h1 style={{ fontFamily: 'serif', fontSize: '1.8rem', color: '#3D2B1F', marginBottom: '0.25rem' }}>
+          IT-Hjelp Forslagstavle
+        </h1>
+        <p style={{ color: '#8B7355', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+          Legg inn dine idéer og forslag
+        </p>
 
         <div className="mb-8">
           <AddProposalForm onAdded={handleAdded} />
         </div>
 
         {loading ? (
-          <p className="text-gray-400">Laster forslag...</p>
+          <p style={{ color: '#8B7355' }}>Laster forslag...</p>
         ) : proposals.length === 0 ? (
-          <p className="text-gray-400">Ingen forslag ennå — legg til det første!</p>
+          <p style={{ color: '#8B7355' }}>Ingen forslag ennå! Legg til det første!</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {proposals.map(proposal => (
               <ProposalCard
                 key={proposal.id}

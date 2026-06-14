@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { type Proposal, updateProposalStatus, deleteProposal } from '../api/proposals'
 
-const statusStyles: Record<Proposal['status'], { label: string; color: string }> = {
-  new:      { label: 'Ny',           color: 'bg-yellow-100 text-yellow-800' },
-  reviewed: { label: 'Gjennomgått', color: 'bg-blue-100 text-blue-800' },
-  approved: { label: 'Godkjent',    color: 'bg-green-100 text-green-800' },
-  rejected: { label: 'Avslått',     color: 'bg-red-100 text-red-800' },
+const statusStyles: Record<Proposal['status'], { label: string; bg: string; badge: string; text: string; subtext: string }> = {
+  new:      { label: 'Ny',           bg: '#FEF08A', badge: '#FDE047', text: '#3D3000', subtext: '#6B5500' },
+  reviewed: { label: 'Gjennomgått', bg: '#93C5FD', badge: '#60A5FA', text: '#1E3A5F', subtext: '#1E40AF' },
+  approved: { label: 'Godkjent',    bg: '#86EFAC', badge: '#4ADE80', text: '#14532D', subtext: '#166534' },
+  rejected: { label: 'Avslått',     bg: '#FCA5A5', badge: '#F87171', text: '#450A0A', subtext: '#7F1D1D' },
 }
+
+const rotations = [-1.5, 1, -0.5, 1.5, -1, 0.8]
 
 interface Props {
   proposal: Proposal
@@ -16,7 +18,8 @@ interface Props {
 
 export default function ProposalCard({ proposal, onUpdated, onDeleted }: Props) {
   const [loading, setLoading] = useState(false)
-  const { color } = statusStyles[proposal.status]
+  const style = statusStyles[proposal.status]
+  const rotation = rotations[proposal.id % rotations.length]
 
   async function handleStatusChange(e: React.ChangeEvent<HTMLSelectElement>) {
     setLoading(true)
@@ -33,29 +36,68 @@ export default function ProposalCard({ proposal, onUpdated, onDeleted }: Props) 
   }
 
   return (
-    <div className={`border rounded-lg p-4 shadow-sm flex flex-col gap-2 ${color}`}>
-      <div className="flex justify-between items-start">
-        <h2 className="font-semibold text-gray-800 text-lg">{proposal.title}</h2>
+    <div style={{
+      background: style.bg,
+      borderRadius: '2px 12px 12px 12px',
+      padding: '1rem',
+      boxShadow: '3px 3px 0 rgba(0,0,0,0.1)',
+      transform: `rotate(${rotation}deg)`,
+      position: 'relative',
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '6px',
+      opacity: loading ? 0.6 : 1,
+      transition: 'opacity 0.2s',
+    }}>
+      {/* Tape */}
+      <div style={{
+        position: 'absolute',
+        top: '-8px',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        width: '28px',
+        height: '16px',
+        background: 'rgba(0,0,0,0.12)',
+        borderRadius: '2px',
+      }} />
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <p style={{ fontWeight: 500, fontSize: '14px', color: style.text, margin: 0, flex: 1 }}>
+          {proposal.title}
+        </p>
         <button
           onClick={handleDelete}
           disabled={loading}
-          className="text-gray-400 hover:text-red-500 transition-colors text-lg disabled:opacity-50"
+          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '16px', padding: '0 0 0 8px', opacity: 0.5 }}
         >
           🗑️
         </button>
       </div>
+
       {proposal.description && (
-        <p className="text-gray-600 text-sm">{proposal.description}</p>
-      )}
-      <div className="flex justify-between items-center mt-auto pt-2">
-        <p className="text-gray-400 text-xs">
-          {new Date(proposal.created_at).toLocaleDateString('nb-NO')}
+        <p style={{ fontSize: '12px', color: style.subtext, margin: 0 }}>
+          {proposal.description}
         </p>
+      )}
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto', paddingTop: '8px' }}>
+        <span style={{ fontSize: '11px', color: style.subtext }}>
+          {new Date(proposal.created_at).toLocaleDateString('nb-NO')}
+        </span>
         <select
           value={proposal.status}
           onChange={handleStatusChange}
           disabled={loading}
-          className="text-xs border border-gray-300 rounded px-2 py-1 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-300"
+          style={{
+            fontSize: '11px',
+            background: style.badge,
+            color: style.text,
+            border: 'none',
+            borderRadius: '999px',
+            padding: '2px 8px',
+            fontWeight: 500,
+            cursor: 'pointer',
+          }}
         >
           <option value="new">Ny</option>
           <option value="reviewed">Gjennomgått</option>
