@@ -68,6 +68,3 @@ Vite brukes som byggverktøy for frontend fordi det starter opp raskt og gir ras
 
 **Tailwind CSS**
 Tailwind gjør det raskt å style komponenter direkte i JSX uten å måtte skrive separate CSS-filer. Det passer godt for et prosjekt av denne størrelsen.
-
-**CORS (django-cors-headers)**
-Siden frontend og backend kjører på forskjellige porter under utvikling (5173 og 8000), er CORS nødvendig for at nettleseren skal tillate kommunikasjon mellom dem.
