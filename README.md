@@ -45,3 +45,29 @@ npm run dev
 | POST | /api/proposals/ | Opprett nytt forslag |
 | PATCH | /api/proposals/:id/ | Oppdater status |
 | DELETE | /api/proposals/:id/ | Slett forslag |
+
+## Hvis jeg hadde hatt mer tid
+- Legge til flere måter å sortere og filtrere forslag på, slik at brukerne lettere kan finne relevante innlegg.
+- Implementere automatisk gjenkjenning av lignende forslag, slik at forslag om samme tema kan slås sammen eller brukere kan oppfordres til å støtte eksisterende forslag i stedet for å opprette duplikater.
+- Innføre dark mode for å forbedre brukeropplevelsen og tilgjengeligheten i ulike lysforhold.
+- Legge til støtte for flere språk for å gjøre plattformen tilgjengelig for et bredere publikum.
+
+## Tekniske valg
+
+**Django REST Framework (backend)**
+Jeg valgte Django fordi det er et modent og veldokumentert rammeverk for Python. Django REST Framework gjør det enkelt å bygge et REST API med lite kode — `ModelViewSet` gir automatisk støtte for GET, POST, PATCH og DELETE uten at man trenger å skrive disse metodene manuelt.
+
+**SQLite (database)**
+SQLite er innebygd i Django og krever ingen ekstra oppsett, noe som gjør det ideelt for en MVP. All data lagres i én fil (`db.sqlite3`) lokalt på maskinen.
+
+**React + TypeScript (frontend)**
+React gjør det enkelt å bygge dynamiske brukergrensesnitt der siden oppdaterer seg uten reload. TypeScript ble valgt for å få bedre feilmeldinger under utvikling og tydeligere struktur på dataene som sendes mellom frontend og backend.
+
+**Vite**
+Vite brukes som byggverktøy for frontend fordi det starter opp raskt og gir rask reload under utvikling.
+
+**Tailwind CSS**
+Tailwind gjør det raskt å style komponenter direkte i JSX uten å måtte skrive separate CSS-filer. Det passer godt for et prosjekt av denne størrelsen.
+
+**CORS (django-cors-headers)**
+Siden frontend og backend kjører på forskjellige porter under utvikling (5173 og 8000), er CORS nødvendig for at nettleseren skal tillate kommunikasjon mellom dem.
